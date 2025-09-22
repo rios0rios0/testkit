@@ -1,0 +1,22 @@
+{
+  "horusecCliFilesOrPathsToIgnore": [
+    "**/vendor/**",
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/coverage.out",
+    "**/coverage.html"
+  ],
+  "horusecCliReturnErrorIfFoundVulnerability": true,
+  "horusecCliSeverityToReturnError": "MEDIUM",
+  "horusecCliToolsConfig": {
+    "Bandit": {
+      "isToIgnoreRules": false
+    },
+    "GoSec": {
+      "isToIgnoreRules": false
+    },
+    "SecurityCodeScan": {
+      "isToIgnoreRules": false
+    }
+  }
+}

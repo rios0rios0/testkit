@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/rios0rios0/testkit"
+	test "github.com/rios0rios0/testkit/pkg/test"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 
 	// Example 1: Basic UserBuilder usage
 	fmt.Println("1. Basic UserBuilder Usage:")
-	userBuilder := testkit.NewUserBuilder()
+	userBuilder := test.NewUserBuilder()
 	userBuilder.WithName("Alice Smith").
 		WithEmail("alice@example.com").
 		WithAge(28).
@@ -21,7 +21,7 @@ func main() {
 		WithMetadata("hire_date", "2023-01-15")
 
 	result := userBuilder.Build()
-	if user, ok := result.(*testkit.TestUser); ok {
+	if user, ok := result.(*test.TestUser); ok {
 		fmt.Printf("   Created user: %+v\n", user)
 	} else if err, ok := result.(error); ok {
 		fmt.Printf("   Error: %v\n", err)
@@ -29,24 +29,24 @@ func main() {
 
 	// Example 2: Factory Pattern
 	fmt.Println("\n2. Factory Pattern Usage:")
-	builder, err := testkit.CreateBuilder("user")
+	builder, err := test.CreateBuilder("user")
 	if err != nil {
 		log.Fatal(err)
 	}
 	
-	userBuilder2 := builder.(*testkit.UserBuilder)
+	userBuilder2 := builder.(*test.UserBuilder)
 	userBuilder2.WithName("Bob Wilson").
 		WithEmail("bob@example.com").
 		WithAge(35)
 
 	result2 := userBuilder2.Build()
-	if user, ok := result2.(*testkit.TestUser); ok {
+	if user, ok := result2.(*test.TestUser); ok {
 		fmt.Printf("   Factory-created user: %+v\n", user)
 	}
 
 	// Example 3: Configuration System
 	fmt.Println("\n3. Configuration System:")
-	config := testkit.NewBuilderConfig()
+	config := test.NewBuilderConfig()
 	config.WithValidation(true).
 		WithTag("env", "test").
 		WithTag("team", "qa").
@@ -55,14 +55,14 @@ func main() {
 		WithDefault("age", 30).
 		WithDefault("active", true)
 
-	configuredBuilder := testkit.NewUserBuilder()
+	configuredBuilder := test.NewUserBuilder()
 	err = config.ApplyTo(configuredBuilder)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	result3 := configuredBuilder.Build()
-	if user, ok := result3.(*testkit.TestUser); ok {
+	if user, ok := result3.(*test.TestUser); ok {
 		fmt.Printf("   Configured user: %+v\n", user)
 		fmt.Printf("   Builder tags: env=%s, team=%s\n", 
 			configuredBuilder.GetTag("env"), 
@@ -71,7 +71,7 @@ func main() {
 
 	// Example 4: Validation and Error Handling
 	fmt.Println("\n4. Validation and Error Handling:")
-	invalidBuilder := testkit.NewUserBuilder()
+	invalidBuilder := test.NewUserBuilder()
 	invalidBuilder.WithName("").  // Invalid empty name
 		WithEmail("").              // Invalid empty email
 		WithAge(-5)                 // Invalid negative age
@@ -83,13 +83,13 @@ func main() {
 
 	// Example 5: Builder State Management
 	fmt.Println("\n5. Builder State Management:")
-	originalBuilder := testkit.NewUserBuilder()
+	originalBuilder := test.NewUserBuilder()
 	originalBuilder.WithName("Original User").
 		WithEmail("original@example.com").
 		WithTag("version", "v1")
 
 	// Clone the builder
-	clonedBuilder := originalBuilder.Clone().(*testkit.UserBuilder)
+	clonedBuilder := originalBuilder.Clone().(*test.UserBuilder)
 	clonedBuilder.WithName("Cloned User").
 		WithTag("version", "v2")
 
@@ -97,7 +97,7 @@ func main() {
 		originalBuilder.GetTag("version"),
 		func() string {
 			if result := originalBuilder.Build(); result != nil {
-				if user, ok := result.(*testkit.TestUser); ok {
+				if user, ok := result.(*test.TestUser); ok {
 					return user.Name
 				}
 			}
@@ -108,7 +108,7 @@ func main() {
 		clonedBuilder.GetTag("version"),
 		func() string {
 			if result := clonedBuilder.Build(); result != nil {
-				if user, ok := result.(*testkit.TestUser); ok {
+				if user, ok := result.(*test.TestUser); ok {
 					return user.Name
 				}
 			}
@@ -122,9 +122,9 @@ func main() {
 
 	// Example 6: Custom Factory
 	fmt.Println("\n6. Custom Factory Usage:")
-	customFactory := testkit.NewBuilderFactory()
-	customFactory.Register("admin_user", func() testkit.Builder {
-		builder := testkit.NewUserBuilder()
+	customFactory := test.NewBuilderFactory()
+	customFactory.Register("admin_user", func() test.Builder {
+		builder := test.NewUserBuilder()
 		builder.WithUserTag("role", "admin").
 			WithActive(true)
 		return builder
@@ -135,12 +135,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	adminUserBuilder := adminBuilder.(*testkit.UserBuilder)
+	adminUserBuilder := adminBuilder.(*test.UserBuilder)
 	adminUserBuilder.WithName("Admin User").
 		WithEmail("admin@example.com")
 
 	result6 := adminUserBuilder.Build()
-	if user, ok := result6.(*testkit.TestUser); ok {
+	if user, ok := result6.(*test.TestUser); ok {
 		fmt.Printf("   Admin user: %+v\n", user)
 	}
 
