@@ -27,7 +27,7 @@ Using the factory pattern:
 	factory.Register("mybuilder", func() testkit.Builder {
 		return testkit.NewBaseBuilder()
 	})
-	
+
 	builder, err := factory.Create("mybuilder")
 	if err != nil {
 		// handle error
@@ -41,14 +41,14 @@ To create a custom builder, embed BaseBuilder and implement the Builder interfac
 		*testkit.BaseBuilder
 		obj *MyObject
 	}
-	
+
 	func NewMyObjectBuilder() *MyObjectBuilder {
 		return &MyObjectBuilder{
 			BaseBuilder: testkit.NewBaseBuilder(),
 			obj:         &MyObject{},
 		}
 	}
-	
+
 	func (b *MyObjectBuilder) WithName(name string) *MyObjectBuilder {
 		if b.IsValidationEnabled() && name == "" {
 			b.AddError(errors.New("name cannot be empty"))
@@ -57,7 +57,7 @@ To create a custom builder, embed BaseBuilder and implement the Builder interfac
 		b.obj.Name = name
 		return b
 	}
-	
+
 	func (b *MyObjectBuilder) Build() interface{} {
 		if b.HasErrors() {
 			return fmt.Errorf("validation errors: %v", b.GetErrors())
@@ -74,7 +74,7 @@ Use BuilderConfig for setting up builders with defaults:
 	config.WithValidation(false)
 	config.WithTag("env", "test")
 	config.WithDefault("name", "default_name")
-	
+
 	builder := NewMyObjectBuilder()
 	config.ApplyTo(builder)
 
@@ -89,7 +89,7 @@ Builders accumulate errors during configuration and report them at build time:
 
 	builder := NewMyObjectBuilder()
 	builder.WithName("") // Adds validation error
-	
+
 	result := builder.Build()
 	if err, ok := result.(error); ok {
 		// Handle build errors

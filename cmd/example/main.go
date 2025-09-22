@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	userBuilder2 := builder.(*testkit.UserBuilder)
 	userBuilder2.WithName("Bob Wilson").
 		WithEmail("bob@example.com").
@@ -64,17 +64,17 @@ func main() {
 	result3 := configuredBuilder.Build()
 	if user, ok := result3.(*testkit.TestUser); ok {
 		fmt.Printf("   Configured user: %+v\n", user)
-		fmt.Printf("   Builder tags: env=%s, team=%s\n", 
-			configuredBuilder.GetTag("env"), 
+		fmt.Printf("   Builder tags: env=%s, team=%s\n",
+			configuredBuilder.GetTag("env"),
 			configuredBuilder.GetTag("team"))
 	}
 
 	// Example 4: Validation and Error Handling
 	fmt.Println("\n4. Validation and Error Handling:")
 	invalidBuilder := testkit.NewUserBuilder()
-	invalidBuilder.WithName("").  // Invalid empty name
-		WithEmail("").              // Invalid empty email
-		WithAge(-5)                 // Invalid negative age
+	invalidBuilder.WithName(""). // Invalid empty name
+					WithEmail(""). // Invalid empty email
+					WithAge(-5)    // Invalid negative age
 
 	result4 := invalidBuilder.Build()
 	if err, ok := result4.(error); ok {
@@ -93,7 +93,7 @@ func main() {
 	clonedBuilder.WithName("Cloned User").
 		WithTag("version", "v2")
 
-	fmt.Printf("   Original builder name: %s, tag: %s\n", 
+	fmt.Printf("   Original builder name: %s, tag: %s\n",
 		originalBuilder.GetTag("version"),
 		func() string {
 			if result := originalBuilder.Build(); result != nil {
@@ -104,7 +104,7 @@ func main() {
 			return "unknown"
 		}())
 
-	fmt.Printf("   Cloned builder name: %s, tag: %s\n", 
+	fmt.Printf("   Cloned builder name: %s, tag: %s\n",
 		clonedBuilder.GetTag("version"),
 		func() string {
 			if result := clonedBuilder.Build(); result != nil {
@@ -117,7 +117,7 @@ func main() {
 
 	// Reset the original builder
 	originalBuilder.Reset()
-	fmt.Printf("   After reset, original builder has errors: %v\n", 
+	fmt.Printf("   After reset, original builder has errors: %v\n",
 		originalBuilder.HasErrors())
 
 	// Example 6: Custom Factory
