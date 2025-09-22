@@ -17,15 +17,15 @@ The library is built around three main components:
 
 Creating a simple builder:
 
-	builder := testkit.NewBaseBuilder()
+	builder := NewBaseBuilder()
 	builder.WithTag("env", "test").WithValidation(true)
 	result := builder.Build() // Returns nil for base builder
 
 Using the factory pattern:
 
-	factory := testkit.NewBuilderFactory()
-	factory.Register("mybuilder", func() testkit.Builder {
-		return testkit.NewBaseBuilder()
+	factory := NewBuilderFactory()
+	factory.Register("mybuilder", func() Builder {
+		return NewBaseBuilder()
 	})
 	
 	builder, err := factory.Create("mybuilder")
@@ -38,13 +38,13 @@ Using the factory pattern:
 To create a custom builder, embed BaseBuilder and implement the Builder interface:
 
 	type MyObjectBuilder struct {
-		*testkit.BaseBuilder
+		*BaseBuilder
 		obj *MyObject
 	}
 	
 	func NewMyObjectBuilder() *MyObjectBuilder {
 		return &MyObjectBuilder{
-			BaseBuilder: testkit.NewBaseBuilder(),
+			BaseBuilder: NewBaseBuilder(),
 			obj:         &MyObject{},
 		}
 	}
@@ -70,7 +70,7 @@ To create a custom builder, embed BaseBuilder and implement the Builder interfac
 
 Use BuilderConfig for setting up builders with defaults:
 
-	config := testkit.NewBuilderConfig()
+	config := NewBuilderConfig()
 	config.WithValidation(false)
 	config.WithTag("env", "test")
 	config.WithDefault("name", "default_name")
