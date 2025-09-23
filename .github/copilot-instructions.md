@@ -70,12 +70,31 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 - `*.go` -- main library files (builder.go, factory.go, examples.go, doc.go)
 - `*_test.go` -- comprehensive test files with 95.9% coverage
 - `go.mod` -- module definition (requires Go 1.24.7+)
+- `README.md` -- project documentation and usage examples
+- `CHANGELOG.md` -- version history and release notes
+- `CONTRIBUTING.md` -- contributing guidelines and development process
+- `LICENSE` -- MIT license
 
 **Core components:**
 - `builder.go` -- BaseBuilder and Builder interface
 - `examples.go` -- UserBuilder example implementation  
 - `factory.go` -- BuilderFactory and BuilderConfig
 - `doc.go` -- package documentation
+
+## Contributing and Documentation
+
+### Project Documentation
+- `README.md` -- comprehensive project overview, installation, and usage examples
+- `CHANGELOG.md` -- track version history and document breaking changes
+- `CONTRIBUTING.md` -- development guidelines, code style, and contribution process
+- **ALWAYS** update CHANGELOG.md when making user-facing changes
+- **ALWAYS** follow contributing guidelines for code style and testing requirements
+
+### Making Changes
+- Read CONTRIBUTING.md before making modifications
+- Follow semantic versioning guidelines documented in CHANGELOG.md
+- Update documentation when adding new features or changing APIs
+- Ensure all examples in README.md continue to work after changes
 
 ## Common Tasks
 
@@ -114,7 +133,9 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 .github/       -- GitHub configuration
 .gitignore     -- Go-specific gitignore
 LICENSE        -- MIT license
-README.md      -- project documentation  
+README.md      -- project documentation and usage examples
+CHANGELOG.md   -- version history and release notes
+CONTRIBUTING.md -- contributing guidelines and development process
 go.mod         -- Go module file
 *.go           -- source files (builder.go, examples.go, factory.go, doc.go)
 *_test.go      -- test files
