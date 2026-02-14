@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restructured project to align with standard package format
 - Moved source code to `pkg/test/` directory
 - Moved tests to same package for internal field access
+- changed the Go version to `1.26.0` and updated all module dependencies
 
 ## [1.0.0] - Initial Release
 
