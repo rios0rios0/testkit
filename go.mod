@@ -1,3 +1,3 @@
 module github.com/rios0rios0/testkit
 
-go 1.24.7
+go 1.26.0
