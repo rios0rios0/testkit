@@ -1,4 +1,12 @@
-# testkit
+<h1 align="center">testkit</h1>
+<p align="center">
+    <a href="https://github.com/rios0rios0/testkit/releases/latest">
+        <img src="https://img.shields.io/github/release/rios0rios0/testkit.svg?style=for-the-badge&logo=github" alt="Latest Release"/></a>
+    <a href="https://github.com/rios0rios0/testkit/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/rios0rios0/testkit.svg?style=for-the-badge&logo=github" alt="License"/></a>
+    <a href="https://github.com/rios0rios0/testkit/actions/workflows/default.yaml">
+        <img src="https://img.shields.io/github/actions/workflow/status/rios0rios0/testkit/default.yaml?branch=main&style=for-the-badge&logo=github" alt="Build Status"/></a>
+</p>
 
 Go testing utility library offering a modular builder framework to streamline test environment setup. It provides interfaces, ready-to-use structs, and patterns for creating reusable builders, fixtures, and mocks. Extensible and ideal for consistent, maintainable tests across repos.
 
@@ -33,14 +41,14 @@ func main() {
     // Create a base builder
     builder := testkit.NewBaseBuilder()
     builder.WithTag("env", "test").WithValidation(true)
-    
+
     // Use the pre-built UserBuilder example
     userBuilder := testkit.NewUserBuilder()
     userBuilder.WithName("John Doe").
         WithEmail("john@example.com").
         WithAge(30).
         WithActive(true)
-    
+
     result := userBuilder.Build()
     if user, ok := result.(*testkit.TestUser); ok {
         fmt.Printf("Created user: %+v\n", user)
@@ -150,7 +158,7 @@ func (b *ProductBuilder) Build() interface{} {
     if b.HasErrors() {
         return fmt.Errorf("validation errors: %v", b.GetErrors())
     }
-    
+
     // Return a copy to avoid mutation
     return &Product{
         ID:       b.product.ID,
@@ -249,16 +257,6 @@ if builder.HasTag("test_type") {
 }
 ```
 
-## Best Practices
-
-1. **Always validate inputs** when validation is enabled
-2. **Return copies** from Build() to prevent mutation
-3. **Use meaningful error messages** for validation failures
-4. **Implement Clone() and Reset()** for proper state management
-5. **Register builders** with descriptive names in the factory
-6. **Use tags** for test categorization and metadata
-7. **Apply configurations** consistently across related tests
-
 ## API Reference
 
 ### Core Interfaces
@@ -279,13 +277,8 @@ if builder.HasTag("test_type") {
 
 ## Contributing
 
-This library is designed to be extended. Feel free to:
-
-1. Create additional builder types
-2. Add new validation patterns
-3. Extend the configuration system
-4. Improve error handling
+Contributions are welcome! Feel free to create additional builder types, add new validation patterns, extend the configuration system, or improve error handling.
 
 ## License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
