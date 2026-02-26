@@ -283,7 +283,7 @@ if builder.HasTag("test_type") {
 
 ## Contributing
 
-Contributions are welcome! Feel free to create additional builder types, add new validation patterns, extend the configuration system, or improve error handling.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
