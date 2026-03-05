@@ -1,6 +1,7 @@
 package testkit
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 )
@@ -20,10 +21,10 @@ func NewBuilderFactory() *BuilderFactory {
 // Register registers a builder creation function with a given name.
 func (f *BuilderFactory) Register(name string, createFunc func() Builder) error {
 	if name == "" {
-		return fmt.Errorf("builder name cannot be empty")
+		return errors.New("builder name cannot be empty")
 	}
 	if createFunc == nil {
-		return fmt.Errorf("builder creation function cannot be nil")
+		return errors.New("builder creation function cannot be nil")
 	}
 	f.builders[name] = createFunc
 	return nil
@@ -54,7 +55,7 @@ func (f *BuilderFactory) GetRegisteredNames() []string {
 }
 
 // DefaultFactory is a global factory instance for convenience.
-var DefaultFactory = NewBuilderFactory()
+var DefaultFactory = NewBuilderFactory() //nolint:gochecknoglobals // intentional singleton for convenience API
 
 // RegisterBuilder registers a builder in the default factory.
 func RegisterBuilder(name string, createFunc func() Builder) error {
@@ -70,7 +71,7 @@ func CreateBuilder(name string) (Builder, error) {
 type BuilderConfig struct {
 	ValidationEnabled bool
 	Tags              map[string]string
-	DefaultValues     map[string]interface{}
+	DefaultValues     map[string]any
 }
 
 // NewBuilderConfig creates a new BuilderConfig with default settings.
@@ -78,7 +79,7 @@ func NewBuilderConfig() *BuilderConfig {
 	return &BuilderConfig{
 		ValidationEnabled: true,
 		Tags:              make(map[string]string),
-		DefaultValues:     make(map[string]interface{}),
+		DefaultValues:     make(map[string]any),
 	}
 }
 
@@ -98,9 +99,9 @@ func (c *BuilderConfig) WithTag(key, value string) *BuilderConfig {
 }
 
 // WithDefault sets a default value for a field.
-func (c *BuilderConfig) WithDefault(key string, value interface{}) *BuilderConfig {
+func (c *BuilderConfig) WithDefault(key string, value any) *BuilderConfig {
 	if c.DefaultValues == nil {
-		c.DefaultValues = make(map[string]interface{})
+		c.DefaultValues = make(map[string]any)
 	}
 	c.DefaultValues[key] = value
 	return c
@@ -109,7 +110,7 @@ func (c *BuilderConfig) WithDefault(key string, value interface{}) *BuilderConfi
 // ApplyTo applies the configuration to a builder.
 func (c *BuilderConfig) ApplyTo(builder Builder) error {
 	if builder == nil {
-		return fmt.Errorf("builder cannot be nil")
+		return errors.New("builder cannot be nil")
 	}
 
 	// Use reflection to check if the builder has BaseBuilder methods

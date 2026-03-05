@@ -29,3 +29,14 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 - Validation Framework with built-in error accumulation
 - Tag System for metadata support
 - Clone & Reset capabilities for deep copy and state management
+
+### Fixed
+
+- fixed test compilation error caused by `errors` variable shadowing `errors` package import in builder tests
+- fixed `forbidigo` findings by replacing `fmt.Print*` with `log.Print*` in example code
+- fixed `errcheck` findings by handling unchecked error returns in examples and factory code
+- fixed `govet` shadow findings by using distinct variable names and type switches
+- fixed `funlen` and `cyclop` findings by splitting monolithic `main()` into helper functions
+- fixed `mnd` findings by extracting magic numbers into named constants
+- fixed `nestif` finding by extracting `applyDefaults()` method to reduce nesting depth
+

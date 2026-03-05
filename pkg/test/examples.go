@@ -3,6 +3,7 @@ package testkit
 import (
 	"errors"
 	"fmt"
+	"maps"
 )
 
 // TestUser represents a test user entity for demonstration purposes.
@@ -13,13 +14,14 @@ type TestUser struct {
 	Age      int
 	Active   bool
 	Tags     map[string]string
-	Metadata map[string]interface{}
+	Metadata map[string]any
 }
 
 // UserBuilder builds TestUser instances for testing.
 // It embeds BaseBuilder to inherit common functionality.
 type UserBuilder struct {
 	*BaseBuilder
+
 	user *TestUser
 }
 
@@ -29,7 +31,7 @@ func NewUserBuilder() *UserBuilder {
 		BaseBuilder: NewBaseBuilder(),
 		user: &TestUser{
 			Tags:     make(map[string]string),
-			Metadata: make(map[string]interface{}),
+			Metadata: make(map[string]any),
 		},
 	}
 }
@@ -90,9 +92,9 @@ func (b *UserBuilder) WithUserTag(key, value string) *UserBuilder {
 }
 
 // WithMetadata adds metadata to the user.
-func (b *UserBuilder) WithMetadata(key string, value interface{}) *UserBuilder {
+func (b *UserBuilder) WithMetadata(key string, value any) *UserBuilder {
 	if b.user.Metadata == nil {
-		b.user.Metadata = make(map[string]interface{})
+		b.user.Metadata = make(map[string]any)
 	}
 	b.user.Metadata[key] = value
 	return b
@@ -100,7 +102,7 @@ func (b *UserBuilder) WithMetadata(key string, value interface{}) *UserBuilder {
 
 // Build creates the TestUser instance.
 // It performs final validation and returns the user or an error.
-func (b *UserBuilder) Build() interface{} {
+func (b *UserBuilder) Build() any {
 	if b.HasErrors() {
 		return fmt.Errorf("cannot build user due to validation errors: %v", b.GetErrors())
 	}
@@ -123,18 +125,14 @@ func (b *UserBuilder) Build() interface{} {
 		Age:      b.user.Age,
 		Active:   b.user.Active,
 		Tags:     make(map[string]string),
-		Metadata: make(map[string]interface{}),
+		Metadata: make(map[string]any),
 	}
 
 	// Deep copy tags
-	for k, v := range b.user.Tags {
-		result.Tags[k] = v
-	}
+	maps.Copy(result.Tags, b.user.Tags)
 
 	// Deep copy metadata
-	for k, v := range b.user.Metadata {
-		result.Metadata[k] = v
-	}
+	maps.Copy(result.Metadata, b.user.Metadata)
 
 	return result
 }
@@ -144,15 +142,16 @@ func (b *UserBuilder) Reset() Builder {
 	b.BaseBuilder.Reset()
 	b.user = &TestUser{
 		Tags:     make(map[string]string),
-		Metadata: make(map[string]interface{}),
+		Metadata: make(map[string]any),
 	}
 	return b
 }
 
 // Clone creates a deep copy of the UserBuilder.
 func (b *UserBuilder) Clone() Builder {
+	baseClone, _ := b.BaseBuilder.Clone().(*BaseBuilder)
 	clone := &UserBuilder{
-		BaseBuilder: b.BaseBuilder.Clone().(*BaseBuilder),
+		BaseBuilder: baseClone,
 		user: &TestUser{
 			ID:       b.user.ID,
 			Name:     b.user.Name,
@@ -160,19 +159,15 @@ func (b *UserBuilder) Clone() Builder {
 			Age:      b.user.Age,
 			Active:   b.user.Active,
 			Tags:     make(map[string]string),
-			Metadata: make(map[string]interface{}),
+			Metadata: make(map[string]any),
 		},
 	}
 
 	// Deep copy user tags
-	for k, v := range b.user.Tags {
-		clone.user.Tags[k] = v
-	}
+	maps.Copy(clone.user.Tags, b.user.Tags)
 
 	// Deep copy user metadata
-	for k, v := range b.user.Metadata {
-		clone.user.Metadata[k] = v
-	}
+	maps.Copy(clone.user.Metadata, b.user.Metadata)
 
 	return clone
 }
@@ -192,33 +187,40 @@ func (b *UserBuilder) ApplyConfig(config *BuilderConfig) error {
 	}
 
 	// Apply default values specific to UserBuilder
-	if defaults := config.DefaultValues; defaults != nil {
-		if id, ok := defaults["id"].(int); ok {
-			b.WithID(id)
-		}
-		if name, ok := defaults["name"].(string); ok {
-			b.WithName(name)
-		}
-		if email, ok := defaults["email"].(string); ok {
-			b.WithEmail(email)
-		}
-		if age, ok := defaults["age"].(int); ok {
-			b.WithAge(age)
-		}
-		if active, ok := defaults["active"].(bool); ok {
-			b.WithActive(active)
-		}
-	}
+	b.applyDefaults(config.DefaultValues)
 
 	return nil
 }
 
-// Factory function for UserBuilder
+// applyDefaults applies default values from the configuration map to the builder.
+func (b *UserBuilder) applyDefaults(defaults map[string]any) {
+	if defaults == nil {
+		return
+	}
+
+	if id, ok := defaults["id"].(int); ok {
+		b.WithID(id)
+	}
+	if name, ok := defaults["name"].(string); ok {
+		b.WithName(name)
+	}
+	if email, ok := defaults["email"].(string); ok {
+		b.WithEmail(email)
+	}
+	if age, ok := defaults["age"].(int); ok {
+		b.WithAge(age)
+	}
+	if active, ok := defaults["active"].(bool); ok {
+		b.WithActive(active)
+	}
+}
+
+// Factory function for UserBuilder.
 func createUserBuilder() Builder {
 	return NewUserBuilder()
 }
 
-// Register UserBuilder in the default factory
-func init() {
-	RegisterBuilder("user", createUserBuilder)
+// Register UserBuilder in the default factory.
+func init() { //nolint:gochecknoinits // factory registration requires init
+	_ = RegisterBuilder("user", createUserBuilder)
 }
