@@ -1,4 +1,4 @@
-package testkit
+package testkit //nolint:testpackage // tests require access to unexported fields for thorough verification
 
 import (
 	"testing"

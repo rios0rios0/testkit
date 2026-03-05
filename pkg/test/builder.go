@@ -1,12 +1,13 @@
-// Package testkit provides utilities for testing setups including a modular builder framework.
 package testkit
+
+import "maps"
 
 // Builder defines the interface that all builders must implement.
 // This provides a common contract for all test builders in the library.
 type Builder interface {
 	// Build performs the final construction step and returns the built object.
 	// Implementations should return the appropriate type for their specific builder.
-	Build() interface{}
+	Build() any
 
 	// Reset clears the builder state, allowing it to be reused.
 	Reset() Builder
@@ -100,7 +101,7 @@ func (b *BaseBuilder) ClearErrors() *BaseBuilder {
 
 // Build is a default implementation that returns nil.
 // Specific builders should override this method.
-func (b *BaseBuilder) Build() interface{} {
+func (b *BaseBuilder) Build() any {
 	return nil
 }
 
@@ -121,9 +122,7 @@ func (b *BaseBuilder) Clone() Builder {
 	}
 
 	// Deep copy tags
-	for k, v := range b.tags {
-		clone.tags[k] = v
-	}
+	maps.Copy(clone.tags, b.tags)
 
 	// Deep copy errors
 	copy(clone.errors, b.errors)

@@ -1,4 +1,4 @@
-package testkit
+package testkit //nolint:testpackage // tests require access to unexported fields for thorough verification
 
 import (
 	"errors"
@@ -84,12 +84,12 @@ func TestBaseBuilder_ErrorHandling(t *testing.T) {
 		t.Error("Expected builder to have errors after adding one")
 	}
 
-	errors := builder.GetErrors()
-	if len(errors) != 1 {
-		t.Fatalf("Expected 1 error, got %d", len(errors))
+	errs := builder.GetErrors()
+	if len(errs) != 1 {
+		t.Fatalf("Expected 1 error, got %d", len(errs))
 	}
 
-	if errors[0] != testError {
+	if !errors.Is(errs[0], testError) {
 		t.Error("Expected the same error instance")
 	}
 
