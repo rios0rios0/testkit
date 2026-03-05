@@ -7,7 +7,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 ## Working Effectively
 
 ### Bootstrap and Dependencies
-- Ensure Go 1.24.7+ is installed
+- Ensure Go 1.26.0+ is installed
 - `cd /home/runner/work/testkit/testkit` (repository root)
 - `go mod tidy` -- downloads and organizes dependencies (takes ~2 seconds)
 - `go mod download` -- ensures all dependencies are available
@@ -26,7 +26,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 ### Code Quality
 - `go fmt ./...` -- formats all Go code (required before committing)
 - `go vet ./...` -- runs static analysis (required before committing)  
-- Linting: golangci-lint has compatibility issues with Go 1.24.7 - do NOT attempt to install or run it
+- Linting: `golangci-lint run ./...` -- runs linters (used in CI via the shared pipeline)
 
 ### Run the Example Application
 - `go run cmd/example/main.go` -- demonstrates all library features. Takes ~0.04 seconds.
@@ -50,7 +50,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
    ```bash
    go test ./... -v
    ```
-   - All 26 tests must pass
+   - All 25 tests must pass
    - No test failures or panics allowed
    - Coverage should remain at ~95%+
 
@@ -65,17 +65,20 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 ## Repository Structure
 
 **Key directories and files:**
-- `/` -- root module directory with all source code
+- `/` -- root module directory
+- `pkg/test/` -- main library package (`github.com/rios0rios0/testkit/pkg/test`)
 - `cmd/example/main.go` -- example application demonstrating all features
-- `*.go` -- main library files (builder.go, factory.go, examples.go, doc.go)
-- `*_test.go` -- comprehensive test files with 95.9% coverage
-- `go.mod` -- module definition (requires Go 1.24.7+)
+- `pkg/test/*.go` -- main library files (builder.go, factory.go, examples.go, doc.go)
+- `pkg/test/*_test.go` -- comprehensive test files with 95.9% coverage
+- `go.mod` -- module definition (requires Go 1.26.0+)
+- `Makefile` -- build targets provided via shared pipeline makefiles
 - `README.md` -- project documentation and usage examples
 - `CHANGELOG.md` -- version history and release notes
 - `CONTRIBUTING.md` -- contributing guidelines and development process
+- `CODE_OF_CONDUCT.md` -- community code of conduct
 - `LICENSE` -- MIT license
 
-**Core components:**
+**Core components (all in `pkg/test/`):**
 - `builder.go` -- BaseBuilder and Builder interface
 - `examples.go` -- UserBuilder example implementation  
 - `factory.go` -- BuilderFactory and BuilderConfig
@@ -104,7 +107,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 - For new builder types: Test Build(), Clone(), Reset(), and error handling
 
 ### Adding New Features
-- Follow the builder pattern established in examples.go
+- Follow the builder pattern established in `pkg/test/examples.go`
 - Embed BaseBuilder for common functionality
 - Implement validation in With* methods when IsValidationEnabled() is true
 - Return errors from Build() when HasErrors() is true
@@ -129,24 +132,26 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 
 ### Repository Root Contents
 ```
-.git/          -- git repository
-.github/       -- GitHub configuration
-.gitignore     -- Go-specific gitignore
-LICENSE        -- MIT license
-README.md      -- project documentation and usage examples
-CHANGELOG.md   -- version history and release notes
+.git/           -- git repository
+.github/        -- GitHub configuration (workflows, copilot instructions)
+.editorconfig   -- editor configuration
+.gitignore      -- Go-specific gitignore
+LICENSE         -- MIT license
+Makefile        -- build targets via shared pipeline makefiles
+README.md       -- project documentation and usage examples
+CHANGELOG.md    -- version history and release notes
 CONTRIBUTING.md -- contributing guidelines and development process
-go.mod         -- Go module file
-*.go           -- source files (builder.go, examples.go, factory.go, doc.go)
-*_test.go      -- test files
-cmd/           -- example application
+CODE_OF_CONDUCT.md -- community code of conduct
+go.mod          -- Go module file
+cmd/            -- example application (cmd/example/main.go)
+pkg/test/       -- main library package (builder.go, examples.go, factory.go, doc.go)
 ```
 
 ### go.mod Contents
 ```go
 module github.com/rios0rios0/testkit
 
-go 1.24.7
+go 1.26.0
 ```
 
 ### Example Application Output
@@ -178,8 +183,8 @@ go 1.24.7
 
 ## Important Notes
 
-- **No CI/CD pipeline exists** - manual validation required
-- **No Makefile** - use go commands directly  
+- **CI/CD pipeline** - `.github/workflows/default.yaml` uses the shared `rios0rios0/pipelines` Go library workflow; runs on push/PR to `main` and tags
+- **Makefile** - provides targets via `rios0rios0/pipelines` shared makefiles (optional, not required for local development)
 - **Library project** - no deployable artifacts, focus on API correctness
 - **High test coverage** - maintain 95%+ coverage when adding features
 - **Thread safety** - builders are NOT thread-safe by design
@@ -190,7 +195,7 @@ go 1.24.7
 
 **Build failures:**
 - Run `go mod tidy` to fix dependency issues
-- Check Go version is 1.24.7+
+- Check Go version is 1.26.0+
 
 **Test failures:**  
 - Ensure no validation logic changes without updating tests
