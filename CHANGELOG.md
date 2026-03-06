@@ -16,13 +16,10 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
-### Changed
-- Restructured project to align with standard package format
-- Moved source code to `pkg/test/` directory
-- Moved tests to same package for internal field access
-- changed the Go version to `1.26.0` and updated all module dependencies
+## [1.0.0] - 2026-03-06
 
 ### Added
+
 - Modular Builder Pattern with extensible base builder
 - Factory System for dynamic builder creation and management
 - Configuration Management for applying default values and settings
@@ -30,10 +27,16 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 - Tag System for metadata support
 - Clone & Reset capabilities for deep copy and state management
 
+### Changed
+
+- Restructured project to align with standard package format
+- Moved source code to `pkg/test/` directory
+- Moved tests to same package for internal field access
+- changed the Go version to `1.26.0` and updated all module dependencies
+
 ### Fixed
 
 - fixed test compilation error caused by `errors` variable shadowing `errors` package import in builder tests
-- fixed `forbidigo` findings by replacing `fmt.Print*` with `log.Print*` in example code
 - fixed `errcheck` findings by handling unchecked error returns in examples and factory code
 - fixed `govet` shadow findings by using distinct variable names and type switches
 - fixed `funlen` and `cyclop` findings by splitting monolithic `main()` into helper functions
