@@ -21,6 +21,7 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 - Moved source code to `pkg/test/` directory
 - Moved tests to same package for internal field access
 - changed the Go version to `1.26.0` and updated all module dependencies
+- changed the Go version to `1.26.1` and updated all module dependencies
 
 ### Added
 - Modular Builder Pattern with extensible base builder
