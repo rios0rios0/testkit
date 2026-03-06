@@ -16,27 +16,24 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
-### Changed
-- Restructured project to align with standard package format
-- Moved source code to `pkg/test/` directory
-- Moved tests to same package for internal field access
-- changed the Go version to `1.26.0` and updated all module dependencies
+## [0.1.0] - 2026-03-06
 
 ### Added
-- Modular Builder Pattern with extensible base builder
-- Factory System for dynamic builder creation and management
-- Configuration Management for applying default values and settings
-- Validation Framework with built-in error accumulation
-- Tag System for metadata support
-- Clone & Reset capabilities for deep copy and state management
+
+- added Configuration Management for applying default values and settings
+- added Factory System for dynamic builder creation and management
+- added Tag System for metadata support
+- added Validation Framework with built-in error accumulation
+- added clone and reset capabilities for deep copy and state management
+- added modular Builder Pattern with extensible base builder
+
+### Changed
+
+- changed the Go version to `1.26.0` and updated all module dependencies
+- moved tests to same package for internal field access
+- restructured project to align with standard package format (`pkg/test/`)
 
 ### Fixed
 
+- fixed 41 lint findings including `forbidigo`, `errcheck`, `govet`, `funlen`, `cyclop`, `mnd`, and `nestif` violations
 - fixed test compilation error caused by `errors` variable shadowing `errors` package import in builder tests
-- fixed `forbidigo` findings by replacing `fmt.Print*` with `log.Print*` in example code
-- fixed `errcheck` findings by handling unchecked error returns in examples and factory code
-- fixed `govet` shadow findings by using distinct variable names and type switches
-- fixed `funlen` and `cyclop` findings by splitting monolithic `main()` into helper functions
-- fixed `mnd` findings by extracting magic numbers into named constants
-- fixed `nestif` finding by extracting `applyDefaults()` method to reduce nesting depth
-
