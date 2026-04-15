@@ -16,6 +16,8 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-04-15
+
 ### Changed
 
 - changed the Go version to `1.26.2` and updated all module dependencies
@@ -30,12 +32,12 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ### Added
 
+- added clone and reset capabilities for deep copy and state management
 - added Configuration Management for applying default values and settings
 - added Factory System for dynamic builder creation and management
+- added modular Builder Pattern with extensible base builder
 - added Tag System for metadata support
 - added Validation Framework with built-in error accumulation
-- added clone and reset capabilities for deep copy and state management
-- added modular Builder Pattern with extensible base builder
 
 ### Changed
 
