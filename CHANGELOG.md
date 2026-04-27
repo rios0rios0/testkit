@@ -16,6 +16,14 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+### Added
+
+- added `CLAUDE.md` with project guidance for Claude Code sessions
+
+### Changed
+
+- refreshed `.github/copilot-instructions.md` to reflect Go 1.26.2 version requirement
+
 ## [0.1.2] - 2026-04-15
 
 ### Changed
