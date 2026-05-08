@@ -7,7 +7,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 ## Working Effectively
 
 ### Bootstrap and Dependencies
-- Ensure Go 1.26.2+ is installed
+- Ensure Go 1.26.3+ is installed
 - Work from the repository root
 - `go mod tidy` -- downloads and organizes dependencies (takes ~2 seconds)
 - `go mod download` -- ensures all dependencies are available
@@ -151,7 +151,7 @@ pkg/test/       -- main library package (builder.go, examples.go, factory.go, do
 ```go
 module github.com/rios0rios0/testkit
 
-go 1.26.2
+go 1.26.3
 ```
 
 ### Example Application Output
