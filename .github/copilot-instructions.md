@@ -70,7 +70,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
 - `cmd/example/main.go` -- example application demonstrating all features
 - `pkg/test/*.go` -- main library files (builder.go, factory.go, examples.go, doc.go)
 - `pkg/test/*_test.go` -- comprehensive test files with 95.9% coverage
-- `go.mod` -- module definition (requires Go 1.26.0+)
+- `go.mod` -- module definition (requires Go 1.26.3+)
 - `Makefile` -- build targets provided via shared pipeline makefiles
 - `README.md` -- project documentation and usage examples
 - `CHANGELOG.md` -- version history and release notes
@@ -195,7 +195,7 @@ go 1.26.3
 
 **Build failures:**
 - Run `go mod tidy` to fix dependency issues
-- Check Go version is 1.26.0+
+- Check Go version is 1.26.3+
 
 **Test failures:**  
 - Ensure no validation logic changes without updating tests
