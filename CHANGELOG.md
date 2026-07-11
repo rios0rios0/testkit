@@ -22,6 +22,10 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 - changed the Go version to `1.26.5` and updated all module dependencies
 
+### Security
+
+- replaced `secrets: inherit` with an explicit `CLAUDE_CODE_OAUTH_TOKEN` secret in the Claude workflow callers, following the least-privilege principle
+
 ## [0.2.4] - 2026-06-09
 
 ### Changed
