@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Go testing utility library (`github.com/rios0rios0/testkit`). Provides a modular builder framework for test environment setup. Pure library -- no deployable artifacts. Requires Go 1.26.4+.
+Go testing utility library (`github.com/rios0rios0/testkit`). Provides a modular builder framework for test environment setup. Pure library -- no deployable artifacts. Requires Go 1.26.5+.
 
 ## Commands
 
