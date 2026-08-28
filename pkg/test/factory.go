@@ -4,10 +4,24 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"sync"
 )
 
 // BuilderFactory provides a way to register and create different types of builders.
+//
+// A BuilderFactory is safe for concurrent use. That matters more here than it would in
+// ordinary library code: DefaultFactory is a package-level singleton, so every t.Parallel()
+// test in a package -- and any helper goroutine those tests start -- reaches the same map
+// through RegisterBuilder and CreateBuilder. (Separate packages run as separate test
+// binaries and do not share it; the race is inside one binary, not across them.) An
+// unsynchronised concurrent map write is a runtime THROW, not a panic -- `recover` cannot
+// catch it, so it takes the whole test binary down with "fatal error: concurrent map
+// writes" and no failing test to point at.
 type BuilderFactory struct {
+	// mutex guards builders. It is an RWMutex because Create, IsRegistered and
+	// GetRegisteredNames are the hot path in a test suite -- registration usually happens
+	// once in an init or a setup helper, and every lookup after it is a read.
+	mutex    sync.RWMutex
 	builders map[string]func() Builder
 }
 
@@ -26,31 +40,52 @@ func (f *BuilderFactory) Register(name string, createFunc func() Builder) error 
 	if createFunc == nil {
 		return errors.New("builder creation function cannot be nil")
 	}
+
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
+
 	f.builders[name] = createFunc
+
 	return nil
 }
 
 // Create creates a new builder instance by name.
 func (f *BuilderFactory) Create(name string) (Builder, error) {
+	f.mutex.RLock()
 	createFunc, exists := f.builders[name]
+	f.mutex.RUnlock()
+
 	if !exists {
 		return nil, fmt.Errorf("builder '%s' not registered", name)
 	}
+
+	// Deliberately called after the lock is released: createFunc is caller-supplied and may
+	// itself register a builder (a composite builder registering its parts is the obvious
+	// case). Holding even a read lock across it would deadlock on the Lock in Register,
+	// since a Go RWMutex is not reentrant and a blocked writer stops further readers.
 	return createFunc(), nil
 }
 
 // IsRegistered checks if a builder is registered with the given name.
 func (f *BuilderFactory) IsRegistered(name string) bool {
+	f.mutex.RLock()
+	defer f.mutex.RUnlock()
+
 	_, exists := f.builders[name]
+
 	return exists
 }
 
 // GetRegisteredNames returns all registered builder names.
 func (f *BuilderFactory) GetRegisteredNames() []string {
+	f.mutex.RLock()
+	defer f.mutex.RUnlock()
+
 	names := make([]string, 0, len(f.builders))
 	for name := range f.builders {
 		names = append(names, name)
 	}
+
 	return names
 }
 

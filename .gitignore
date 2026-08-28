@@ -3,3 +3,10 @@ build
 
 # this space is for project generated files, DO NOT add personal or IDE files here
 # try to use ~/.gitignore of your user for your workspace generated files
+
+# `make test` (pipelines' golang/test/run.sh) writes its reports into the repository ROOT
+# rather than build/, so they need naming individually
+coverage.txt
+coverage.xml
+cobertura.xml
+junit.xml

@@ -1,7 +1,10 @@
 package testkit //nolint:testpackage // tests require access to unexported fields for thorough verification
 
 import (
+	"fmt"
+	"sync"
 	"testing"
+	"time"
 )
 
 func TestBuilderFactory_NewBuilderFactory(t *testing.T) {
@@ -227,5 +230,96 @@ func TestUserBuilderRegistration(t *testing.T) {
 
 	if userBuilder == nil {
 		t.Error("Expected non-nil UserBuilder")
+	}
+}
+
+func TestBuilderFactory_ConcurrentAccess(t *testing.T) {
+	// given
+	const goroutines = 50
+
+	factory := NewBuilderFactory()
+	createFunc := func() Builder { return NewBaseBuilder() }
+
+	var waitGroup sync.WaitGroup
+
+	start := make(chan struct{})
+
+	// when
+	// Every goroutine blocks on the same channel so the registrations and the reads land in
+	// the same instant rather than being serialised by their own start-up cost. Without the
+	// mutex in BuilderFactory this is a "fatal error: concurrent map read and map write",
+	// which no recover can catch, and `go test -race` reports it even when the interleaving
+	// happens not to collide.
+	for i := range goroutines {
+		waitGroup.Add(1)
+
+		go func(index int) {
+			defer waitGroup.Done()
+			<-start
+
+			if err := factory.Register(fmt.Sprintf("builder-%d", index), createFunc); err != nil {
+				t.Errorf("Register(builder-%d) returned %v", index, err)
+			}
+
+			factory.IsRegistered("builder-0")
+			factory.GetRegisteredNames()
+		}(i)
+	}
+
+	close(start)
+	waitGroup.Wait()
+
+	// then
+	if got := len(factory.GetRegisteredNames()); got != goroutines {
+		t.Errorf("Expected %d registered builders, got %d", goroutines, got)
+	}
+
+	for i := range goroutines {
+		name := fmt.Sprintf("builder-%d", i)
+		if !factory.IsRegistered(name) {
+			t.Errorf("Expected %s to be registered", name)
+		}
+	}
+}
+
+func TestBuilderFactory_CreateAllowsReentrantRegistration(t *testing.T) {
+	// given
+	// A creation function is caller-supplied and may register further builders -- a composite
+	// builder registering its parts on first use is the ordinary case. Create must therefore
+	// not hold the lock while it runs, so this asserts the absence of a deadlock rather than
+	// a value. It hangs forever on a regression, so the wait is bounded and reported.
+	factory := NewBuilderFactory()
+
+	err := factory.Register("composite", func() Builder {
+		if regErr := factory.Register("part", func() Builder { return NewBaseBuilder() }); regErr != nil {
+			t.Errorf("nested Register returned %v", regErr)
+		}
+
+		return NewBaseBuilder()
+	})
+	if err != nil {
+		t.Fatalf("Register(composite) returned %v", err)
+	}
+
+	done := make(chan struct{})
+
+	// when
+	go func() {
+		defer close(done)
+
+		if _, createErr := factory.Create("composite"); createErr != nil {
+			t.Errorf("Create(composite) returned %v", createErr)
+		}
+	}()
+
+	// then
+	select {
+	case <-done:
+	case <-time.After(5 * time.Second):
+		t.Fatal("Create deadlocked while its creation function registered another builder")
+	}
+
+	if !factory.IsRegistered("part") {
+		t.Error("Expected the nested registration to have taken effect")
 	}
 }
