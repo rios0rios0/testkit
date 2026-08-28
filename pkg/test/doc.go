@@ -80,8 +80,13 @@ Use BuilderConfig for setting up builders with defaults:
 
 # Thread Safety
 
-The builders in this library are not thread-safe by design. Each goroutine should
-use its own builder instance. Use Clone() to create independent copies when needed.
+Individual builders are not thread-safe by design. Each goroutine should use its
+own builder instance. Use Clone() to create independent copies when needed.
+
+BuilderFactory (and therefore the package-level DefaultFactory with its
+RegisterBuilder and CreateBuilder helpers) is safe for concurrent use: parallel
+tests and their helper goroutines may register and create builders concurrently.
+The instances a factory hands out remain subject to the rule above.
 
 # Error Handling
 
