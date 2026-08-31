@@ -38,7 +38,7 @@ Tests live in the same package (`package testkit`) for internal field access.
 - `With*` methods return the builder (method chaining).
 - Validation guards with `IsValidationEnabled()`; errors accumulate via `AddError()` and surface from `Build()`.
 - `Build()` returns a defensive copy of the entity.
-- Builders are not thread-safe.
+- Builders are not thread-safe. `BuilderFactory` — and the `DefaultFactory` singleton reached by `RegisterBuilder`/`CreateBuilder` — is safe for concurrent use: its registry is guarded by a `sync.RWMutex`, and `Create` runs the creation function after releasing the lock (the lock is non-reentrant, so a builder that registers others would otherwise deadlock).
 - Write a changelog fragment for every change — `chlog new --kind <Kind> --body "..."`, committed from `.changes/unreleased/`. Never edit `CHANGELOG.md`: it is generated from the fragments at release time by `chlog batch auto && chlog merge`.
 
 ## CI

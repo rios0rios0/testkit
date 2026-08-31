@@ -50,7 +50,7 @@ Testkit is a Go module providing a modular builder framework to streamline test 
    ```bash
    go test ./... -v
    ```
-   - All 25 tests must pass
+   - All 27 tests must pass
    - No test failures or panics allowed
    - Coverage should remain at ~95%+
 
@@ -187,7 +187,7 @@ go 1.27.0
 - **Makefile** - provides targets via `rios0rios0/pipelines` shared makefiles (optional, not required for local development)
 - **Library project** - no deployable artifacts, focus on API correctness
 - **High test coverage** - maintain 95%+ coverage when adding features
-- **Thread safety** - builders are NOT thread-safe by design
+- **Thread safety** - individual builders are NOT thread-safe by design, but `BuilderFactory` (and the `DefaultFactory` singleton) IS safe for concurrent use — its registry is guarded by a `sync.RWMutex`, so parallel tests can register and create through it
 - **Error handling** - builders accumulate errors and report at build time
 - **Extensibility** - designed for creating custom builder types
 
