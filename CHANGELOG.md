@@ -22,6 +22,12 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-09-01
+
+### Changed
+
+- refreshed `CLAUDE.md`, `.github/copilot-instructions.md`, and `.github/skills/code-review/SKILL.md` to document that `BuilderFactory` is now safe for concurrent use and to correct the test count in `.github/copilot-instructions.md` from 25 to 27
+
 ## [0.3.1] - 2026-08-28
 
 ### Changed
