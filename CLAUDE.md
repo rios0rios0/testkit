@@ -39,7 +39,7 @@ Tests live in the same package (`package testkit`) for internal field access.
 - Validation guards with `IsValidationEnabled()`; errors accumulate via `AddError()` and surface from `Build()`.
 - `Build()` returns a defensive copy of the entity.
 - Builders are not thread-safe. `BuilderFactory` — and the `DefaultFactory` singleton reached by `RegisterBuilder`/`CreateBuilder` — is safe for concurrent use: its registry is guarded by a `sync.RWMutex`, and `Create` runs the creation function after releasing the lock (the lock is non-reentrant, so a builder that registers others would otherwise deadlock).
-- Write a changelog fragment for every change — `chlog new --kind <Kind> --body "..."`, committed from `.changes/unreleased/`. Never edit `CHANGELOG.md`: it is generated from the fragments at release time by `chlog batch auto && chlog merge`.
+- Write a changelog fragment for every change — `chlog new --kind <Kind> --body '...'`, committed from `.changes/unreleased/`. Never edit `CHANGELOG.md`: it is generated from the fragments at release time by `chlog batch auto && chlog merge`.
 
 ## CI
 
@@ -56,13 +56,14 @@ being asked, before committing.
 
 - Do NOT edit CHANGELOG.md directly; it is generated from fragments.
 - Create the fragment with:
-  `chlog new --kind <Kind> --body "<imperative description>"`
+  `chlog new --kind <Kind> --body '<past-tense description>'`
+- Write an apostrophe inside the single-quoted body as `'\''`.
 - Valid kinds: Added, Changed, Deprecated, Removed, Fixed, Security
 - Choose the kind that best matches the change (e.g., new feature → Added,
   bug fix → Fixed, behavior change → Changed, removal → Removed, security fix → Security).
 - If the change is backward-INCOMPATIBLE with the public API (a breaking
   change), you MUST add the `--breaking` flag:
-  `chlog new --kind <Kind> --breaking --body "<description>"`.
+  `chlog new --kind <Kind> --breaking --body '<past-tense description>'`.
   This is the ONLY thing that triggers a major version bump — the kind alone
   never does (per SemVer, major = incompatible change). When unsure whether a
   change breaks compatibility, ask the user instead of guessing.
