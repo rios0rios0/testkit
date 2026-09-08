@@ -22,6 +22,17 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-09-08
+
+### Changed
+
+- changed both `chlog new` examples in the AI-assistant instruction block of `CLAUDE.md` and `.github/copilot-instructions.md` to `--body '<past-tense description>'`: changelog bodies here are written in simple past tense, and the body is single-quoted because it carries backticks that a double-quoted shell argument would command-substitute, and added the line telling the reader to write an apostrophe inside the single-quoted body as `'\''`, since bodies here carry possessives, and switched the 6 other hand-written `chlog new` examples in `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`, `.github/pull_request_template/default.md`, and `.github/skills/code-review/SKILL.md` to the same single-quoted body argument
+- refreshed `CLAUDE.md` and `.github/copilot-instructions.md` to update the required Go version to `1.27.1`, matching `go.mod`
+
+### Fixed
+
+- regenerated 1 hand-written changelog fragment with `chlog new`, keeping its kind and body, so the filename prefix and the `time` field come from chlog's own clock like every other fragment's
+
 ## [0.3.3] - 2026-09-02
 
 ### Changed
