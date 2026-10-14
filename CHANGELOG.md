@@ -22,6 +22,12 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.3.6] - 2026-10-14
+
+### Changed
+
+- changed the Go version from `1.27.1` to `1.27.2`
+
 ## [0.3.5] - 2026-10-07
 
 ### Changed
