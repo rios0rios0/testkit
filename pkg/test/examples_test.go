@@ -5,6 +5,8 @@ import (
 )
 
 func TestUserBuilder_NewUserBuilder(t *testing.T) {
+	t.Parallel()
+
 	builder := NewUserBuilder()
 
 	if builder == nil {
@@ -29,6 +31,8 @@ func TestUserBuilder_NewUserBuilder(t *testing.T) {
 }
 
 func TestUserBuilder_WithMethods(t *testing.T) {
+	t.Parallel()
+
 	builder := NewUserBuilder()
 
 	// Test WithID
@@ -78,6 +82,8 @@ func TestUserBuilder_WithMethods(t *testing.T) {
 }
 
 func TestUserBuilder_Validation(t *testing.T) {
+	t.Parallel()
+
 	builder := NewUserBuilder()
 
 	// Test negative ID validation
@@ -120,6 +126,8 @@ func TestUserBuilder_Validation(t *testing.T) {
 }
 
 func TestUserBuilder_Build(t *testing.T) {
+	t.Parallel()
+
 	// Test successful build
 	builder := NewUserBuilder()
 	builder.WithID(123)
@@ -166,6 +174,8 @@ func TestUserBuilder_Build(t *testing.T) {
 }
 
 func TestUserBuilder_Build_ValidationErrors(t *testing.T) {
+	t.Parallel()
+
 	// Test build with validation errors
 	builder := NewUserBuilder()
 	builder.WithID(-1) // This will add a validation error
@@ -187,6 +197,8 @@ func TestUserBuilder_Build_ValidationErrors(t *testing.T) {
 }
 
 func TestUserBuilder_Reset(t *testing.T) {
+	t.Parallel()
+
 	builder := NewUserBuilder()
 	builder.WithID(123)
 	builder.WithName("John Doe")
@@ -220,6 +232,8 @@ func TestUserBuilder_Reset(t *testing.T) {
 }
 
 func TestUserBuilder_Clone(t *testing.T) {
+	t.Parallel()
+
 	original := NewUserBuilder()
 	original.WithID(123)
 	original.WithName("John Doe")
@@ -272,6 +286,8 @@ func TestUserBuilder_Clone(t *testing.T) {
 }
 
 func TestUserBuilder_ApplyConfig(t *testing.T) {
+	t.Parallel()
+
 	builder := NewUserBuilder()
 	config := NewBuilderConfig()
 	config.WithValidation(false)
