@@ -8,6 +8,8 @@ import (
 )
 
 func TestBuilderFactory_NewBuilderFactory(t *testing.T) {
+	t.Parallel()
+
 	factory := NewBuilderFactory()
 
 	if factory == nil {
@@ -24,6 +26,8 @@ func TestBuilderFactory_NewBuilderFactory(t *testing.T) {
 }
 
 func TestBuilderFactory_Register(t *testing.T) {
+	t.Parallel()
+
 	factory := NewBuilderFactory()
 
 	// Test successful registration
@@ -51,6 +55,8 @@ func TestBuilderFactory_Register(t *testing.T) {
 }
 
 func TestBuilderFactory_Create(t *testing.T) {
+	t.Parallel()
+
 	factory := NewBuilderFactory()
 
 	// Test creating non-existent builder
@@ -80,6 +86,8 @@ func TestBuilderFactory_Create(t *testing.T) {
 }
 
 func TestBuilderFactory_GetRegisteredNames(t *testing.T) {
+	t.Parallel()
+
 	factory := NewBuilderFactory()
 
 	// Test empty factory
@@ -110,6 +118,8 @@ func TestBuilderFactory_GetRegisteredNames(t *testing.T) {
 }
 
 func TestDefaultFactory(t *testing.T) {
+	t.Parallel()
+
 	// Test that default factory exists
 	if DefaultFactory == nil {
 		t.Error("Expected DefaultFactory to be initialized")
@@ -133,6 +143,8 @@ func TestDefaultFactory(t *testing.T) {
 }
 
 func TestBuilderConfig_NewBuilderConfig(t *testing.T) {
+	t.Parallel()
+
 	config := NewBuilderConfig()
 
 	if config == nil {
@@ -153,6 +165,8 @@ func TestBuilderConfig_NewBuilderConfig(t *testing.T) {
 }
 
 func TestBuilderConfig_With_Methods(t *testing.T) {
+	t.Parallel()
+
 	config := NewBuilderConfig()
 
 	// Test WithValidation
@@ -184,6 +198,8 @@ func TestBuilderConfig_With_Methods(t *testing.T) {
 }
 
 func TestBuilderConfig_ApplyTo(t *testing.T) {
+	t.Parallel()
+
 	config := NewBuilderConfig()
 	config.WithValidation(false)
 	config.WithTag("env", "test")
@@ -212,6 +228,8 @@ func TestBuilderConfig_ApplyTo(t *testing.T) {
 }
 
 func TestUserBuilderRegistration(t *testing.T) {
+	t.Parallel()
+
 	// Test that UserBuilder is registered in the default factory
 	if !DefaultFactory.IsRegistered("user") {
 		t.Error("Expected UserBuilder to be registered as 'user'")
@@ -234,6 +252,8 @@ func TestUserBuilderRegistration(t *testing.T) {
 }
 
 func TestBuilderFactory_ConcurrentAccess(t *testing.T) {
+	t.Parallel()
+
 	// given
 	const goroutines = 50
 
@@ -283,6 +303,8 @@ func TestBuilderFactory_ConcurrentAccess(t *testing.T) {
 }
 
 func TestBuilderFactory_CreateAllowsReentrantRegistration(t *testing.T) {
+	t.Parallel()
+
 	// given
 	// A creation function is caller-supplied and may register further builders -- a composite
 	// builder registering its parts on first use is the ordinary case. Create must therefore

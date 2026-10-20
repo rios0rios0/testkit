@@ -1,0 +1,3 @@
+kind: 'Changed'
+body: 'changed every unit test to run in parallel, which the `paralleltest` linter newly enabled by the shared golangci-lint configuration requires'
+time: '2026-10-20T17:36:16.569265381Z'

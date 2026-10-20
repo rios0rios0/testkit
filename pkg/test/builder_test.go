@@ -6,6 +6,8 @@ import (
 )
 
 func TestBaseBuilder_NewBaseBuilder(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 
 	if builder == nil {
@@ -30,6 +32,8 @@ func TestBaseBuilder_NewBaseBuilder(t *testing.T) {
 }
 
 func TestBaseBuilder_WithTag(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 
 	result := builder.WithTag("env", "test")
@@ -51,6 +55,8 @@ func TestBaseBuilder_WithTag(t *testing.T) {
 }
 
 func TestBaseBuilder_WithValidation(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 
 	// Test disabling validation
@@ -71,6 +77,8 @@ func TestBaseBuilder_WithValidation(t *testing.T) {
 }
 
 func TestBaseBuilder_ErrorHandling(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 
 	if builder.HasErrors() {
@@ -100,6 +108,8 @@ func TestBaseBuilder_ErrorHandling(t *testing.T) {
 }
 
 func TestBaseBuilder_Reset(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 	builder.WithTag("env", "test")
 	builder.WithValidation(false)
@@ -124,6 +134,8 @@ func TestBaseBuilder_Reset(t *testing.T) {
 }
 
 func TestBaseBuilder_Clone(t *testing.T) {
+	t.Parallel()
+
 	original := NewBaseBuilder()
 	original.WithTag("env", "test")
 	original.WithValidation(false)
@@ -161,6 +173,8 @@ func TestBaseBuilder_Clone(t *testing.T) {
 }
 
 func TestBaseBuilder_Build(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 	result := builder.Build()
 
@@ -170,6 +184,8 @@ func TestBaseBuilder_Build(t *testing.T) {
 }
 
 func TestBaseBuilder_NilSafety(t *testing.T) {
+	t.Parallel()
+
 	builder := NewBaseBuilder()
 
 	// Test adding nil error
