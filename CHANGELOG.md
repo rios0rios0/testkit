@@ -22,6 +22,13 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.3.7] - 2026-10-21
+
+### Changed
+
+- changed every unit test to run in parallel, which the `paralleltest` linter newly enabled by the shared golangci-lint configuration requires
+- changed the Go version from `1.27.2` to `1.27.3`
+
 ## [0.3.6] - 2026-10-14
 
 ### Changed
