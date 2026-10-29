@@ -1,0 +1,72 @@
+# AGENTS.md
+
+This file provides guidance to AI coding agents (Claude Code, Codex, Cursor, GitHub Copilot) when working with code in this repository.
+
+## Project
+
+Go testing utility library (`github.com/rios0rios0/testkit`). Provides a modular builder framework for test environment setup. Pure library -- no deployable artifacts. The required Go version is the one in `go.mod`.
+
+## Commands
+
+```bash
+go build ./...              # build all packages
+go test ./... -v            # run all tests
+go fmt ./...                # format (required before commit)
+go vet ./...                # static analysis (required before commit)
+golangci-lint run ./...     # lint with local defaults (CI's config comes from rios0rios0/pipelines)
+go run cmd/example/main.go  # run example app -- use to validate changes
+```
+
+The `Makefile` pulls shared targets from `rios0rios0/pipelines` via `$SCRIPTS_DIR`. Use `go` commands directly for local development.
+
+## Architecture
+
+All library code is in `pkg/test/` (Go package name: `testkit`).
+
+| File | Purpose |
+|------|---------|
+| `builder.go` | `BaseBuilder` struct and `Builder` interface |
+| `factory.go` | `BuilderFactory`, `BuilderConfig`, global registry |
+| `examples.go` | `UserBuilder` reference implementation, `TestUser` entity |
+| `doc.go` | Package-level documentation |
+
+Tests live in the same package (`package testkit`) for internal field access. Every test calls `t.Parallel()`: CI's shared golangci-lint config enables `paralleltest`, which a local default run does not check.
+
+## Conventions
+
+- Custom builders embed `*BaseBuilder` and implement `Builder` (`Build`, `Reset`, `Clone`).
+- `With*` methods return the builder (method chaining).
+- Validation guards with `IsValidationEnabled()`; errors accumulate via `AddError()` and surface from `Build()`.
+- `Build()` returns a defensive copy of the entity.
+- Builders are not thread-safe. `BuilderFactory` — and the `DefaultFactory` singleton reached by `RegisterBuilder`/`CreateBuilder` — is safe for concurrent use: its registry is guarded by a `sync.RWMutex`, and `Create` runs the creation function after releasing the lock (the lock is non-reentrant, so a builder that registers others would otherwise deadlock).
+- Write a changelog fragment for every change — `chlog new --kind <Kind> --body '...'`, committed from `.changes/unreleased/`. Never edit `CHANGELOG.md`: it is generated from the fragments at release time by `chlog batch auto && chlog merge`.
+
+## CI
+
+`.github/workflows/default.yaml` delegates to `rios0rios0/pipelines/.github/workflows/go-library.yaml`. Runs on push/PR to `main` and tags.
+
+<!-- chlog:start -->
+## Changelog (chlog) — MANDATORY
+
+If the repository you are working in uses chlog (a `.chlog.yaml` or `.chlog.yml`
+config file, or a `.changes/` directory, exists at the project root), the
+following is binding and ALWAYS applies: whenever you make ANY change, you MUST
+create a changelog fragment as part of the same change — automatically, without
+being asked, before committing.
+
+- Do NOT edit CHANGELOG.md directly; it is generated from fragments.
+- Create the fragment with:
+  `chlog new --kind <Kind> --body '<past-tense description>'`
+- Write an apostrophe inside the single-quoted body as `'\''`.
+- Valid kinds: Added, Changed, Deprecated, Removed, Fixed, Security
+- Choose the kind that best matches the change (e.g., new feature → Added,
+  bug fix → Fixed, behavior change → Changed, removal → Removed, security fix → Security).
+- If the change is backward-INCOMPATIBLE with the public API (a breaking
+  change), you MUST add the `--breaking` flag:
+  `chlog new --kind <Kind> --breaking --body '<past-tense description>'`.
+  This is the ONLY thing that triggers a major version bump — the kind alone
+  never does (per SemVer, major = incompatible change). When unsure whether a
+  change breaks compatibility, ask the user instead of guessing.
+- Fragments are YAML files in `.changes/unreleased/`; stage them with your commit.
+- `chlog check` fails the build when a fragment is missing — never skip it.
+<!-- chlog:end -->

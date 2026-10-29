@@ -20,7 +20,7 @@ The canonical engineering standards live in the
 repo-tailored index into that guide plus the rules that only apply here. Precedence, highest
 first:
 
-1. This repository's `.github/copilot-instructions.md`, `CLAUDE.md`, and `CONTRIBUTING.md` —
+1. This repository's `.github/copilot-instructions.md`, `AGENTS.md`, and `CONTRIBUTING.md` —
    they describe *this* codebase and its load-bearing invariants.
 2. The **rios0rios0/guide** wiki — the shared standard.
 3. General language idiom.
@@ -121,7 +121,9 @@ See [Go Conventions](https://github.com/rios0rios0/guide/wiki/GoLang-Conventions
   `log` package are not application logging.
 - Errors are wrapped with context: `fmt.Errorf("…: %w", err)`. Never discard an error with
   `_` without a comment explaining why it cannot matter.
-- No `any` in exported signatures — use a constraint or a real interface. Every `//nolint`
+- No `any` in new exported signatures — use a constraint or a real interface. The existing
+  `any` in `Builder.Build`, `BuilderConfig`, `TestUser.Metadata`, and `UserBuilder.WithMetadata`
+  is public API: changing it is a breaking change under the rule above. Every `//nolint`
   directive carries a justification comment.
 - Entities carry no struct tags.
 
@@ -187,7 +189,7 @@ hand.
 - Fragment bodies start with a lowercase verb in simple past tense, capitalise proper nouns
   (GitHub, Go, Docker), and wrap code identifiers and versions in backticks.
 - `README.md` is updated whenever usage, setup, configuration, or architecture changes;
-  `.github/copilot-instructions.md` and `CLAUDE.md` whenever the workflow, commands, or
+  `.github/copilot-instructions.md` and `AGENTS.md` whenever the workflow, commands, or
   structure changes. Documentation and code ship in one commit.
 
 ## Git Flow and pull-request hygiene
@@ -250,7 +252,7 @@ A review that raises noise gets ignored. Do not report these:
 ### Change-control checklist
 - [ ] Changelog entry present for every behavioural change
 - [ ] `README.md` updated if usage, setup, or architecture changed
-- [ ] `.github/copilot-instructions.md` and `CLAUDE.md` updated if the workflow, commands, or structure changed
+- [ ] `.github/copilot-instructions.md` and `AGENTS.md` updated if the workflow, commands, or structure changed
 - [ ] Commit messages follow `type(SCOPE): message` in simple past tense
 - [ ] Breaking changes flagged in the commit footer, the changelog, and the PR description
 
