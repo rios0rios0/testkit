@@ -40,7 +40,7 @@ package main
 
 import (
     "fmt"
-    "github.com/rios0rios0/testkit"
+    "github.com/rios0rios0/testkit/pkg/test"
 )
 
 func main() {

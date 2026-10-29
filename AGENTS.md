@@ -1,10 +1,10 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding agents (Claude Code, Codex, Cursor, GitHub Copilot) when working with code in this repository.
 
 ## Project
 
-Go testing utility library (`github.com/rios0rios0/testkit`). Provides a modular builder framework for test environment setup. Pure library -- no deployable artifacts. Requires Go 1.27.1+.
+Go testing utility library (`github.com/rios0rios0/testkit`). Provides a modular builder framework for test environment setup. Pure library -- no deployable artifacts. The required Go version is the one in `go.mod`.
 
 ## Commands
 
@@ -13,7 +13,7 @@ go build ./...              # build all packages
 go test ./... -v            # run all tests
 go fmt ./...                # format (required before commit)
 go vet ./...                # static analysis (required before commit)
-golangci-lint run ./...     # lint (matches CI)
+golangci-lint run ./...     # lint with local defaults (CI's config comes from rios0rios0/pipelines)
 go run cmd/example/main.go  # run example app -- use to validate changes
 ```
 
@@ -30,7 +30,7 @@ All library code is in `pkg/test/` (Go package name: `testkit`).
 | `examples.go` | `UserBuilder` reference implementation, `TestUser` entity |
 | `doc.go` | Package-level documentation |
 
-Tests live in the same package (`package testkit`) for internal field access.
+Tests live in the same package (`package testkit`) for internal field access. Every test calls `t.Parallel()`: CI's shared golangci-lint config enables `paralleltest`, which a local default run does not check.
 
 ## Conventions
 

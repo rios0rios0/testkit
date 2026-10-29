@@ -1,0 +1,3 @@
+kind: 'Changed'
+body: 'refreshed `AGENTS.md`, `.github/copilot-instructions.md`, `.github/skills/code-review/SKILL.md`, `README.md`, and `CONTRIBUTING.md` to point at `go.mod` for the Go version, document the `t.Parallel()` rule CI''s `paralleltest` linter enforces, drop stale pasted output and timeout boilerplate, reference `AGENTS.md` instead of `CLAUDE.md`, scope the `any` rule to new signatures, fix the README import path to `pkg/test`, and fix the Git Flow wiki link'
+time: '2026-10-29T01:01:36.143436191Z'
