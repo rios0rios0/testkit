@@ -22,6 +22,13 @@ Exceptions are acceptable depending on the circumstances (critical bug fixes tha
 
 ## [Unreleased]
 
+## [0.3.8] - 2026-11-04
+
+### Changed
+
+- moved the agent instructions from `CLAUDE.md` to `AGENTS.md`, keeping a `CLAUDE.md` that imports it
+- refreshed `AGENTS.md`, `.github/copilot-instructions.md`, `.github/skills/code-review/SKILL.md`, `README.md`, and `CONTRIBUTING.md` to point at `go.mod` for the Go version, document the `t.Parallel()` rule CI's `paralleltest` linter enforces, drop stale pasted output and timeout boilerplate, reference `AGENTS.md` instead of `CLAUDE.md`, scope the `any` rule to new signatures, fix the README import path to `pkg/test`, and fix the Git Flow wiki link
+
 ## [0.3.7] - 2026-10-21
 
 ### Changed
